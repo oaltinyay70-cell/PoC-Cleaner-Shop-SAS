@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// --- Models (SQLite version — no enums, uses String instead) ---
+
+model User {
+  id                      String    @id @default(uuid())
+  email                   String    @unique
+  passwordHash            String
+  emailVerified           Boolean   @default(false)
+  businessName            String?
+  serviceType             String?
+  currency                String    @default("EUR")
+  defaultUnit             String    @default("pieces")
+  logoUrl                 String?
+  whatsappApiKey          String?
+  smsApiKey               String?
+  viberApiKey             String?
+  subscriptionTier        String    @default("MVP")
+  subscriptionRenewalDate DateTime?
+  followupDays            Int       @default(30)
+  createdAt               DateTime  @default(now())
+
+  customers  Customer[]
+  jobs       Job[]
+  expenses   Expense[]
+  templates  MessageTemplate[]
+}
+
+model Customer {
+  id               String   @id @default(uuid())
+  businessId       String
+  business         User     @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name             String
+  phone            String
+  email            String?
+  address          String?
+  ratePerUnit      Float?
+  notes            String?
+  preferredChannel String   @default("NONE")
+  isDeleted        Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  jobs Job[]
+}
+
+model Job {
+  id                   String    @id @default(uuid())
+  businessId           String
+  business             User      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customerId           String
+  customer             Customer  @relation(fields: [customerId], references: [id])
+  quantity             Float
+  unit                 String
+  rate                 Float
+  totalPrice           Float
+  status               String    @default("RECEIVED")
+  expectedDeliveryDate DateTime
+  actualDeliveryDate   DateTime?
+  notes                String?
+  receivedAt           DateTime  @default(now())
+  processingAt         DateTime?
+  completedAt          DateTime?
+  deliveredAt          DateTime?
+  createdAt            DateTime  @default(now())
+
+  photos        JobPhoto[]
+  notifications NotificationLog[]
+}
+
+model JobPhoto {
+  id         String   @id @default(uuid())
+  jobId      String
+  job        Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  url        String
+  uploadedAt DateTime @default(now())
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  businessId  String
+  business    User     @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  amount      Float
+  category    String
+  description String?
+  date        DateTime
+  createdAt   DateTime @default(now())
+}
+
+model MessageTemplate {
+  id         String  @id @default(uuid())
+  businessId String
+  business   User    @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name       String
+  body       String
+  isSystem   Boolean @default(false)
+}
+
+model NotificationLog {
+  id           String   @id @default(uuid())
+  businessId   String
+  customerId   String
+  jobId        String?
+  channel      String
+  messageBody  String
+  status       String
+  errorMessage String?
+  sentAt       DateTime @default(now())
+
+  job Job? @relation(fields: [jobId], references: [id])
+}
