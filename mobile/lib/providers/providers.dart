@@ -5,16 +5,17 @@ import '../services/api_service.dart';
 final apiServiceProvider = Provider<ApiService>((ref) => ApiService());
 
 /// Auth state: null = loading, false = not logged in, true = logged in.
-final authStateProvider = StateNotifierProvider<AuthNotifier, AsyncValue<bool>>((ref) {
-  return AuthNotifier(ref.read(apiServiceProvider));
-});
+/// Uses Notifier (Riverpod v2) instead of deprecated StateNotifier.
+final authStateProvider = NotifierProvider<AuthNotifier, AsyncValue<bool>>(AuthNotifier.new);
 
-class AuthNotifier extends StateNotifier<AsyncValue<bool>> {
-  final ApiService _api;
-
-  AuthNotifier(this._api) : super(const AsyncValue.loading()) {
+class AuthNotifier extends Notifier<AsyncValue<bool>> {
+  @override
+  AsyncValue<bool> build() {
     _checkAuth();
+    return const AsyncValue.loading();
   }
+
+  ApiService get _api => ref.read(apiServiceProvider);
 
   Future<void> _checkAuth() async {
     await _api.init();

@@ -5,6 +5,7 @@ import 'screens/login_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/customer_list_screen.dart';
 import 'screens/job_list_screen.dart';
+import 'screens/settings_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: CleanerShopApp()));
@@ -70,7 +71,7 @@ class _HomeShellState extends State<HomeShell> {
     DashboardScreen(),
     CustomerListScreen(),
     JobListScreen(),
-    Center(child: Text('Settings', style: TextStyle(color: Colors.white54))), // Placeholder
+    const SettingsScreen(),
   ];
 
   @override

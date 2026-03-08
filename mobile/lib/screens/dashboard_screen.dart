@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/providers.dart';
+import 'create_customer_screen.dart';
+import 'create_job_screen.dart';
+import 'create_expense_screen.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -55,7 +58,6 @@ class DashboardScreen extends ConsumerWidget {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(context, 0),
     );
   }
 
@@ -105,11 +107,17 @@ class DashboardScreen extends ConsumerWidget {
   Widget _buildQuickActions(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: _actionButton('New Job', Icons.add_circle_outline, const Color(0xFF00D2FF), () {})),
+        Expanded(child: _actionButton('New Job', Icons.add_circle_outline, const Color(0xFF00D2FF), () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CreateJobScreen()));
+        })),
         const SizedBox(width: 12),
-        Expanded(child: _actionButton('Add Customer', Icons.person_add_outlined, const Color(0xFF4ADE80), () {})),
+        Expanded(child: _actionButton('Add Customer', Icons.person_add_outlined, const Color(0xFF4ADE80), () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CreateCustomerScreen()));
+        })),
         const SizedBox(width: 12),
-        Expanded(child: _actionButton('Add Expense', Icons.receipt_outlined, const Color(0xFFFBBF24), () {})),
+        Expanded(child: _actionButton('Add Expense', Icons.receipt_outlined, const Color(0xFFFBBF24), () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CreateExpenseScreen()));
+        })),
       ],
     );
   }
@@ -143,19 +151,4 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 
-  BottomNavigationBar _buildBottomNav(BuildContext context, int current) {
-    return BottomNavigationBar(
-      currentIndex: current,
-      backgroundColor: const Color(0xFF16213E),
-      selectedItemColor: const Color(0xFF00D2FF),
-      unselectedItemColor: Colors.white38,
-      type: BottomNavigationBarType.fixed,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Dashboard'),
-        BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Customers'),
-        BottomNavigationBarItem(icon: Icon(Icons.work), label: 'Jobs'),
-        BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
-      ],
-    );
-  }
 }

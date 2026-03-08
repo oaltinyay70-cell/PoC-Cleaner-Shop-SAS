@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/providers.dart';
+import 'create_customer_screen.dart';
 
 class CustomerListScreen extends ConsumerWidget {
   const CustomerListScreen({super.key});
@@ -36,7 +37,9 @@ class CustomerListScreen extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFF00D2FF),
         child: const Icon(Icons.person_add, color: Color(0xFF1A1A2E)),
-        onPressed: () {}, // TODO: navigate to create customer
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CreateCustomerScreen()));
+        },
       ),
     );
   }

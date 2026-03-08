@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/providers.dart';
+import 'create_job_screen.dart';
 
 class JobListScreen extends ConsumerWidget {
   const JobListScreen({super.key});
@@ -36,7 +37,9 @@ class JobListScreen extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFF00D2FF),
         child: const Icon(Icons.add, color: Color(0xFF1A1A2E)),
-        onPressed: () {}, // TODO: navigate to create job
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CreateJobScreen()));
+        },
       ),
     );
   }
